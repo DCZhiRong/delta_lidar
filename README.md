@@ -10,6 +10,7 @@ colcon build --symlink-install
 ```
 
 ### Things to note
+Default values
 ```
 topic = /scan
 frame_id = laser_frame
@@ -19,7 +20,6 @@ baud_rate = 115200
 
 
 ### How to run
-Default values are listed below
 ```
 ###Using ros run
 ros2 run delta_lidar delta_lidar_node --ros-args -p baud_rate:=115200 -p frame_id:=laser_frame -p port:=/dev/ttyUSB0
