@@ -19,7 +19,9 @@
 //#ifndef _countof
 //#define _countof(_Array) (int)(sizeof(_Array) / sizeof(_Array[0]))
 //#endif
-
+#define PORT_DEFAULT "/dev/ttyUSB0"           // Serial device driver name (sym link to real dev)
+#define BAUD_RATE_DEFAULT 115200              // Serial baud rate
+#define FRAME_ID_DEFAULT "laser_frame"        // frame_id in LaserScan messages
 typedef struct _rslidar_data
 {
     _rslidar_data()
@@ -87,14 +89,27 @@ int main(int argc, char *argv[])
     rclcpp::init(argc, argv);
     auto node = rclcpp::Node::make_shared("delta_2b_lidar_node");
 
-    int opt_com_baudrate = 115200;
-    string opt_com_path;
-    string frame_id;
+
 
     rclcpp::NodeOptions options;
     auto nh_private = std::make_shared<rclcpp::Node>("delta_2b_lidar_node", options);
-    nh_private->get_parameter_or<string>("serial_port", opt_com_path, "/dev/ttyUSB0");
-    nh_private->get_parameter_or<string>("frame_id", frame_id, "laser_frame");
+    node->declare_parameter("port", PORT_DEFAULT);
+    auto port_param = rclcpp::Parameter("port", PORT_DEFAULT);
+
+    node->declare_parameter("baud_rate", BAUD_RATE_DEFAULT);
+    auto baud_rate_param = rclcpp::Parameter("baud_rate", BAUD_RATE_DEFAULT);
+
+    node->declare_parameter("frame_id", FRAME_ID_DEFAULT);
+    auto frame_id_param  = rclcpp::Parameter("frame_id", FRAME_ID_DEFAULT);
+
+        
+    node->get_parameter_or("port", port_param, port_param);
+    node->get_parameter_or("baud_rate", baud_rate_param, baud_rate_param);
+    node->get_parameter_or("frame_id", frame_id_param, frame_id_param);
+    string opt_com_path = port_param.value_to_string();
+    int opt_com_baudrate = baud_rate_param.as_int();
+    string frame_id = frame_id_param.value_to_string();
+
     //    nh_private.param<string>("lidar_scan", lidar_scan, "scan");
     //    ros::Publisher scan_pub = nh.advertise<sensor_msgs::LaserScan>(lidar_scan, 1000);
     auto scan_pub = node->create_publisher<sensor_msgs::msg::LaserScan>("scan", 1000);
