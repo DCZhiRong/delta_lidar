@@ -9,6 +9,14 @@ cd ..
 colcon build --symlink-install
 ```
 
+### Things to note
+```
+topic = /scan
+frame_id = laser_frame
+port = /dev/ttyUSB0
+baud_rate = 115200
+```
+
 
 ### How to run
 Default values are listed below
