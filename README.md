@@ -20,7 +20,7 @@ ros2 run delta_lidar delta_lidar_node --ros-args -p baud_rate:=115200 -p frame_i
 ros2 launch delta_lidar lidar.launch.py
 
 ###Launch with rviz
-ros2 launch delta_lidar view_lidar.launch.py
+ros2 launch delta_lidar view_delta_lidar.launch.py
 ```
 
 
