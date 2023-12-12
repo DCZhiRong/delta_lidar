@@ -10,10 +10,13 @@ import launch.actions
 from launch.actions import DeclareLaunchArgument
 
 def generate_launch_description():
-    
+    pkg_share = launch_ros.substitutions.FindPackageShare(package="delta_lidar").find(
+        "delta_lidar"
+    )
     port = LaunchConfiguration('port')
     baud_rate = LaunchConfiguration('baud_rate')
     frame_id = LaunchConfiguration('frame_id')
+    rviz_config = LaunchConfiguration('rviz_config')
     
     declare_port= DeclareLaunchArgument(
         'port',
@@ -29,16 +32,17 @@ def generate_launch_description():
         'frame_id',
         default_value='laser_frame',
         description='frame id for lidar msg')
-    DeclareLaunchArgument(
-                name="rvizconfig",
-                default_value=os.path.join(get_package_share_directory("delta_lidar"), 'rviz', 'delta_lidar.rviz'),
-                description="Absolute path to rviz config file",
+    declare_rviz_config = DeclareLaunchArgument(
+        'rviz_config',
+        default_value= os.path.join(pkg_share, "rviz/delta_lidar.rviz"),
+        description="Absolute path to rviz config file",
             ),
             
     return LaunchDescription([
         declare_port,
         declare_frame_id,
         declare_baud_rate,
+        declare_rviz_config,
         launch_ros.actions.Node(
             package='delta_lidar',
             executable='delta_lidar_node',
@@ -51,7 +55,7 @@ def generate_launch_description():
                 executable="rviz2",
                 name="rviz2",
                 output="screen",
-                arguments=["-d", LaunchConfiguration("rvizconfig")],
+                arguments=["-d", LaunchConfiguration("rviz_config")],
             ), 
     ])
 
