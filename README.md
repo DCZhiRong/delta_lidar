@@ -1,5 +1,5 @@
 ## DISCLAIMER
-Hi this is a port of 3iRobotics' lidar ros package to Ros 2(I'm gonna be honest I have no idea how I ported it either).
+Hi this is a port of 3iRobotics'(Also commonly used in Xiaomi's vacuum robots) lidar ros package to Ros 2(I'm gonna be honest I have no idea how I ported it either).
 
 ### How to build
 ```
